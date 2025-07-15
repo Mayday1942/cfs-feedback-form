@@ -30,7 +30,8 @@ review_form = '''
       As a family business, reviews mean everything to us—they help us grow, build trust, and continue providing top-quality service.
       A 5-star ⭐⭐⭐⭐⭐ review would mean the world to us.
       <br><br>
-      If we fell short in any way, please share your honest feedback so we can improve. Thank you for your support.
+      But if we fell short of expectations in any way, we genuinely welcome honest feedback. It gives us the opportunity to reach out, make things right, and improve wherever we can. Your voice helps us grow.
+      Thank you for your support!
     </p>
     <form method="POST" action="/review">
       <label for="rating" style="font-size:16px;">How would you rate our service?</label><br><br>
