@@ -24,7 +24,7 @@ review_form = '''
 </head>
 <body style="margin:0; padding:0; font-family:sans-serif; background-color:#f4f4f4;">
   <div style="max-width:600px; margin:40px auto; background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); text-align:center;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png" width="100" style="margin-bottom:20px;">
+    <img src="https://imgur.com/a/f2S7sN8">
     <h2 style="color:#2a6f97;">We appreciate the opportunity to transform your yard.</h2>
     <p style="font-size:16px; color:#333;">
       As a family business, reviews mean everything to us—they help us grow, build trust, and continue providing top-quality service.
