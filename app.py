@@ -15,7 +15,15 @@ app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USER')
 mail = Mail(app)
 
 review_form = '''
-<h2>Rate your experience with Campos Family Services</h2>
+<h2>We appreciative of the opportunity of transforming your yard.
+
+ As a family business, reviews mean everything to us—they help us grow, build trust, and continue providing top-quality service. A 5-star ⭐⭐⭐⭐⭐ review would mean the world to us.
+
+But if we fell short of expectations in any way, we genuinely welcome honest feedback. It gives us the opportunity to reach out, make things right, and improve wherever we can. Your voice helps us grow.
+
+Thank you for your support!
+
+Campos Family Services team</h2>
 <form method="POST" action="/review">
   <select name="rating" required>
     <option value="">--Choose--</option>
