@@ -1,10 +1,11 @@
 from flask import Flask, request, render_template_string, redirect
 from flask_mail import Mail, Message
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
 
-# Email config (secure using environment variables)
+# Email configuration using environment variables
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -12,9 +13,12 @@ app.config['MAIL_USERNAME'] = os.getenv('MAIL_USER')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASS')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USER')
 
+# Optional: limit upload size (e.g., 5 MB)
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
+
 mail = Mail(app)
 
-# Main review form
+# Review form HTML
 review_form = '''
 <!DOCTYPE html>
 <html>
@@ -50,7 +54,7 @@ review_form = '''
 </html>
 '''
 
-# Complaint form with name/email field
+# Complaint form with file upload
 complaint_form = '''
 <!DOCTYPE html>
 <html>
@@ -62,12 +66,15 @@ complaint_form = '''
   <div style="max-width:600px; margin:40px auto; background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); text-align:center;">
     <h2 style="color:#c0392b;">We're sorry to hear that!</h2>
     <p style="font-size:15px; color:#333;">Please let us know what went wrong and how we can do better.</p>
-    <form method="POST" action="/submit_complaint" style="text-align:left;">
+    <form method="POST" action="/submit_complaint" enctype="multipart/form-data" style="text-align:left;">
       <label>Contact Info (Name or Email):</label><br>
       <input type="text" name="contact" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;" required><br>
 
       <label>Feedback:</label><br>
       <textarea name="complaint" rows="5" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;" required></textarea><br><br>
+
+      <label>Upload a Photo (optional):</label><br>
+      <input type="file" name="photo" accept="image/*" style="margin-bottom:15px;"><br>
 
       <input type="hidden" name="rating" value="{{ rating }}">
       <button type="submit" style="padding:12px 24px; font-size:16px; background:#c0392b; color:white; border:none; border-radius:5px;">Send Feedback</button>
@@ -93,12 +100,25 @@ def submit_complaint():
     contact = request.form['contact']
     complaint = request.form['complaint']
     rating = request.form['rating']
+    uploaded_file = request.files.get('photo')
+
     msg = Message(
         subject=f"New Complaint (Rating: {rating} star)",
         recipients=["Admin@camposfamilyservices.com"],
         body=f"A client left {rating} star(s).\n\nContact Info: {contact}\n\nComplaint:\n{complaint}"
     )
+
+    # If an image is uploaded, attach it to the email
+    if uploaded_file and uploaded_file.filename:
+        filename = secure_filename(uploaded_file.filename)
+        msg.attach(
+            filename=filename,
+            content_type=uploaded_file.content_type,
+            data=uploaded_file.read()
+        )
+
     mail.send(msg)
+
     return "<h3 style='font-family:sans-serif; text-align:center;'>Thank you for your feedback. We'll work to improve your experience.</h3>"
 
 if __name__ == "__main__":
